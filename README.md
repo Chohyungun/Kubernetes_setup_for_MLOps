@@ -34,7 +34,7 @@ MLOps 파이프라인을 구축하는 자세한 내용은 원본 노션 페이�
 ## Kubernetes 실습 환경 구축
 
 <aside>
-⚠️ **짚고 넘어갈 점**
+⚠️ 짚고 넘어갈 점
 1. v0.1 기준 튜토리얼 과정은,  MLOps 환경에 대한 아무런 준비가 되어 있지 않다고 가정하여, 모든 소프트웨어를 터미널 창에서  하나하나 설치합니다. 추후 문서의 버전을 업그레이드 하면서 최종적으로는 도커 이미지 파일을 통해 MLOps 환경을 간편하게 빌드할 수 있도록 하겠습니다.
 2. 본 문서에서는 Minikube를 통한 Kubertenes 환경을 구축합니다. 추후 문서의 버전을 업그레이드 하며 K3s, Kubeadm, k8s 환경에서도 동일한 환경을 구축할 수 있도록 하고, 최종적으로는 kubernetes 이외의 다른 애플리케이션을 활용하여 MLOps 환경을 구축하겠습니다.
 
@@ -106,13 +106,6 @@ MLOps 파이프라인을 구축하는 자세한 내용은 원본 노션 페이�
 **클라이언트 컴포넌트**
 
 1. Kubectl 설치
-    
-    <aside>
-    💡 **Kubectl란?**
-    개발자나 시스템 관리자가 커맨드 라인을 통해 Kubernetes 클러스터와 상호 작용 역할을 하는 클라이언트 전용 도구입니다.
-    
-    </aside>
-    
     ```bash
     # WSL 사용자일 경우입니다
     curl -LO https://dl.k8s.io/release/v1.21.7/bin/linux/amd64/kubectl
@@ -128,12 +121,6 @@ MLOps 파이프라인을 구축하는 자세한 내용은 원본 노션 페이�
 
 1. Minikube 설치
     
-    <aside>
-    💡 **Minikube란?**
-    개발자나 시스템 관리자가 커맨드 라인을 통해 Kubernetes 클러스터와 상호 작용 역할을 하는 클라이언트 전용 도구입니다.
-    
-    </aside>
-    
     ```bash
     wget https://github.com/kubernetes/minikube/releases/download/v1.24.0/minikube-linux-amd64
     sudo install minikube-linux-amd64 /usr/local/bin/minikube
@@ -146,7 +133,7 @@ MLOps 파이프라인을 구축하는 자세한 내용은 원본 노션 페이�
     ```
     
     <aside>
-    ⚠️ **WSL 사용시 유의점**
+    ⚠️ WSL 사용시 유의점
     
     - wsl2는 기본적으로 `systemctl`을 제공하지 않아 minikube 설치에 어려움을 겪을 수 있습니다 아래 코드를 반드시 `minikube` 설치 전에 적용하여 `systemctl` 를 설치하여 주세요
     
@@ -225,28 +212,16 @@ MLOps 파이프라인을 구축하는 자세한 내용은 원본 노션 페이�
             ```
             
             <aside>
-            ⚠️ **control-plane**의 버전을 주의 깊게 확인해주세요
+            ⚠️ control-plane의 버전을 주의 깊게 확인해주세요
             버전이 1.22 이상일 경우 내부 클러스터 pod와 namespace 설치 시 문제가 발생합니다.
             
             </aside>
-            
-            <aside>
-            💡 **Control plane란?**
-            클러스터의 모든 주요 결정과 작업 스케줄링, 클러스터 상태 유지 등을 담당하는 클러스터의 관리 센터를 지칭합니다.
-            
-            </aside>
+
             
 
 ### 4. Kubernetes 모듈 설치
 
 1. Helm 설치
-    
-    <aside>
-    💡 **Helm이란?**
-    Kubernetes에서 패키지와 관련된 자원을 한 번에 배포하고 관리할 수 있게 도와주는 패키지 매니징 도구입니다.
-    
-    </aside>
-    
     ```bash
     wget https://get.helm.sh/helm-v3.7.1-linux-amd64.tar.gz
     tar -zxvf helm-v3.7.1-linux-amd64.tar.gz
@@ -254,13 +229,6 @@ MLOps 파이프라인을 구축하는 자세한 내용은 원본 노션 페이�
     ```
     
 2. Kustomize 설치
-    
-    <aside>
-    💡 **Kustomize란?**
-    Kubernetes에서 패키지와 관련된 자원을 한 번에 배포하고 관리할 수 있게 도와주는 패키지 매니징 도구입니다.
-    
-    </aside>
-    
     ```bash
     # kustomize v3.10.0 버전 설치: 해당 버전 이상의 버전을 설치 할 경우 호환 문제 발생
     wget https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.10.0/kustomize_v3.10.0_linux_amd64.tar.gz
@@ -269,33 +237,13 @@ MLOps 파이프라인을 구축하는 자세한 내용은 원본 노션 페이�
     ```
     
 3. CSI 플러그인 설치
-    
-    <aside>
-    💡 **CSI(Container Storage Interface) 플러그인이란?**
-    Kubernetes의 표준 인터페이스를 통해 다양한 스토리지 시스템을 클러스터에 연결하는 역할을 수행하는 모듈입니다.
-    
-    </aside>
-    
     - Local Path Provisioner 설치
-        
-        <aside>
-        💡 **Local Path Provisioner란?**
-        단일 노드 클러스터 등 로컬 노드의 스토리지를 활용하여 간단하게 퍼시스턴트 볼륨을 생성 및 관리하는 CSI 플러그인의 구성요소 중 하나입니다.
-        
-        </aside>
-        
         ```bash
         kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.20/deploy/local-path-storage.yaml
         kubectl -n local-path-storage get pod
         ```
         
     - Pod의 Running을 확인 후 default storage class로 변경
-        
-        <aside>
-        💡 **Storage class란?**
-        스토리지 성능, 복제, 백업 정책과 같은 프로비저너의 설정과 관련된 정책을 정의하는 클래스입니다.
-        
-        </aside>
         
         ```bash
         kubectl patch storageclass local-path  -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
@@ -304,20 +252,7 @@ MLOps 파이프라인을 구축하는 자세한 내용은 원본 노션 페이�
 
 ### 5. Kubeflow 및 내 컴포넌트 설치
 
-<aside>
-💡 **Kubeflow란?**
-Kubeflow는 머신러닝 워크플로를 Kubernetes 상에서 쉽게 배포하고 관리할 수 있도록 설계된 오픈 소스 플랫폼입니다.
-
-</aside>
-
 - Kubeflow를 설치하기 위하여 설치에 필요한 manifests 파일들을 준비합니다
-    
-    <aside>
-    💡 **Manifests란?**
-    Kubeflow 컴포넌트를 Kubernetes 클러스터에 설치하고 구성하는 데 필요한 설정 파일과 템플릿의 모음으로, Kubernetes에서 컨테이너화된 애플리케이션을 배포, 관리, 운영하기 위한 YAML 파일로 구성되어 있습니다.
-    
-    </aside>
-    
     ```bash
     git clone -b v1.4.0 https://github.com/kubeflow/manifests.git
     cd manifests
@@ -345,11 +280,6 @@ Kubeflow는 머신러닝 워크플로를 Kubernetes 상에서 쉽게 배포하�
     | Tensorboard & Tensorboard Web App | 텐서보드 로깅 데이터를 시각화하는 도구 및 그 웹 인터페이스 |
     | Training Operator | 다양한 머신러닝 트레이닝 프레임워크를 쿠버네티스 상에서 관리 |
     | User Namespace | 각 사용자가 리소스를 격리하여 사용할 수 있는 네임스페이스 |
-    
-    <aside>
-    ⚠️ 클러스터 내부의 자세한 설명은 상단의 구성요소 레퍼런스 파일을 통해 확인해주시길 바랍니다.
-    
-    </aside>
     
     - Pod간 의존하는 경우가 많기 때문에 하나씩 설치하여 running 여부를 살펴보는 것을 추천드립니
     
@@ -417,12 +347,6 @@ Kubeflow는 머신러닝 워크플로를 Kubernetes 상에서 쉽게 배포하�
     
 2. MiniO 설정
     
-    <aside>
-    💡 **MiniO란?**
-    오픈소스로 제공되는 분산 스토리지 솔루션입니다 AWS S3(Simple Storage Service)와 호환되는 API를 제공하여, 프라이빗 클라우드 환경에서 S3와 같은 스토리지 기능을 구현할 때 널리 사용됩니다.
-    
-    </aside>
-    
     ```bash
     kubectl port-forward svc/minio-service -n kubeflow 9000:9000
     ```
@@ -446,12 +370,6 @@ Kubeflow는 머신러닝 워크플로를 Kubernetes 상에서 쉽게 배포하�
     
 
 ### 7. Seldon-Core 설치
-
-<aside>
-💡 **Seldon Core란?**
-대규모로 Kubernetes 환경에서 머신러닝 모델을 배포할 수 있는 오픈소스 플랫폼입니다
-
-</aside>
 
 - Seldon-Core를 사용하기 위해서는 쿠버네티스의 인그레스(Ingress)를 담당하는 Ambassador 와 Istio 와 같은 모듈이 필요합니다
     - Ambassador vs Istio는 상기 언급 레퍼런스를 통해 확인하실 수 있습니다.
@@ -478,12 +396,6 @@ Kubeflow는 머신러닝 워크플로를 Kubernetes 상에서 쉽게 배포하�
     
 
 ### 8. Prometheus & Grafana 설치
-
-<aside>
-💡 **Prometheus, Grafana란?**
-프로메테우스는 다양한 대상으로부터 Metric을 수집하는 도구이며, 그라파나는 모인 데이터를 시각화하는 것을 도와주는 도구입니다.
-
-</aside>
 
 ```bash
 helm repo add seldonio https://storage.googleapis.com/seldon-charts
