@@ -1,1 +1,0 @@
-# Kubernetes_setup_for_MLOps
