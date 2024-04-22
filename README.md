@@ -239,7 +239,7 @@ MLOps를 공부하는 데 있어서 가장 큰 장벽은 MLOps 시스템을 구�
                 client-key-data: <~~>
             ```
             
-            ![Untitled](%5BTutorial%5D%20Kubernetes%E1%84%85%E1%85%B3%E1%86%AF%20%E1%84%90%E1%85%A9%E1%86%BC%E1%84%92%E1%85%A1%E1%86%AB%20MLOps%20%E1%84%89%E1%85%B5%E1%84%89%E1%85%B3%E1%84%90%E1%85%A6%E1%86%B7%20%E1%84%80%E1%85%AE%E1%84%8E%E1%85%AE%200cb15dc18dd1424b85af4356e315e2f1/Untitled.png)
+            ![Untitled](/[Tutorial] Kubernetes를 통한 MLOps 시스템 구추 0cb15dc18dd1424b85af4356e315e2f11/Untitled.png)
             
             <aside>
             ⚠️ **control-plane**의 버전을 주의 깊게 확인해주세요
